@@ -1,36 +1,166 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Here’s the complete and well-structured `README.md` file for your **Task Management Application**:
 
-## Getting Started
+---
 
-First, run the development server:
+# **Task Management Application**
 
+A simple and intuitive task management application built using **Next.js** with **Server Actions** for managing tasks effectively. This project supports full CRUD operations, allowing users to create, view, edit, and delete tasks with data persistence via MongoDB.
+
+---
+
+## **Features**
+
+- **Task Operations**:
+  - Create, read, update, and delete tasks.
+- **Responsive Design**:
+  - Fully responsive and optimized for all screen sizes.
+
+---
+
+## **Technologies Used**
+
+- **Frontend**:  
+  - [Next.js](https://nextjs.org/) (Latest version)
+  - [TailwindCSS](https://tailwindcss.com/) for styling
+
+- **Backend**:  
+  - Next.js Server Actions for server-side logic
+
+- **Database**:  
+  - [MongoDB](https://www.mongodb.com/) for data persistence
+
+- **Deployment**:  
+  - [Vercel](https://vercel.com/) for hosting the application
+
+---
+
+## **Live Demo**
+
+- **Live Application**: [Task Management App](https://task-management-app-using-next-js.vercel.app/)
+
+---
+
+## **Setup Instructions**
+
+### **Prerequisites**
+- [Node.js](https://nodejs.org/) (v14 or higher)
+- [MongoDB](https://www.mongodb.com/) (Local or Cloud instance)
+- [Git](https://git-scm.com/)
+
+### **Step 1: Clone the Repository**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Sayan-Rajak-Das/Task-Management-App-Using-NextJs.git
+cd Task-Management-App-Using-NextJs
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### **Step 2: Install Dependencies**
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### **Step 3: Configure Environment Variables**
+Create a `.env.local` file in the root directory and add the following:
+```
+MONGODB_URI=<Your MongoDB Connection String>
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### **Step 4: Run the Application**
+To start the application in development mode:
+```bash
+npm run dev
+```
+- Open your browser and navigate to `http://localhost:3000`.
 
-## Learn More
+### **Step 5: Build for Production**
+To create an optimized production build:
+```bash
+npm run build
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## **Deployment**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The application is deployed on Vercel. Follow these steps for deployment:
 
-## Deploy on Vercel
+1. Push your code to a GitHub repository.
+2. Log in to [Vercel](https://vercel.com/) and import your GitHub repository.
+3. Set the **environment variables** in Vercel:
+   ```
+   MONGODB_URI=<Your MongoDB Connection String>
+   ```
+4. Trigger a deployment and access the live URL provided by Vercel.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## **API Endpoints**
+
+### **Base URL**: `/api/tasks`
+
+1. **GET** `/api/tasks`  
+   Fetch all tasks.
+
+   **Response**:
+   ```json
+   [
+     {
+       "_id": "task-id",
+       "title": "Task Title",
+       "description": "Task Description",
+       "dueDate": "2025-02-10T00:00:00.000Z",
+       "completed": false
+     }
+   ]
+   ```
+
+2. **POST** `/api/tasks`  
+   Create a new task.
+
+   **Request**:
+   ```json
+   {
+     "title": "New Task",
+     "description": "Task Description",
+     "dueDate": "2025-02-10"
+   }
+   ```
+
+3. **PATCH** `/api/tasks`  
+   Update an existing task.
+
+   **Request**:
+   ```json
+   {
+     "id": "task-id",
+     "title": "Updated Task Title",
+     "description": "Updated Task Description",
+     "completed": true
+   }
+   ```
+
+4. **DELETE** `/api/tasks`  
+   Delete a task.
+
+   **Request**:
+   ```json
+   {
+     "id": "task-id"
+   }
+   ```
+
+---
+
+## **Known Issues**
+- Ensure your MongoDB connection string is valid.
+- Currently, there is no authentication mechanism.
+
+---
+
+## **Future Improvements**
+- Add user authentication for personalized task management.
+- Introduce drag-and-drop functionality for task prioritization.
+- Enhance the UI with animations and additional features.
+
+---
+

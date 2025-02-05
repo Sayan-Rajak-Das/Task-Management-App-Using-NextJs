@@ -4,7 +4,7 @@
 import { useState } from "react";
 
 interface TaskFormProps {
-  addTask: (newTask: any) => void; // Callback to pass the new task to TaskList
+  addTask: (newTask: any) => void;              // Callback to pass the new task to TaskList
 }
 
 export default function TaskForm({ addTask }: TaskFormProps) {
