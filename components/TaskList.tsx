@@ -7,6 +7,7 @@ interface Task {
   _id: string; // MongoDB Object ID
   title: string;
   description: string;
+  dueDate: string;
 }
 
 interface TaskListProps {
@@ -18,6 +19,7 @@ export default function TaskList({ tasks, setTasks }: TaskListProps) {
   const [editingTask, setEditingTask] = useState<Task | null>(null); // Task being edited
   const [newTitle, setNewTitle] = useState(""); // Updated title for the task
   const [newDescription, setNewDescription] = useState(""); // Updated description for the task
+  const [newDueDate, setNewDueDate] = useState("");
 
   // Delete a task
   const deleteTask = async (id: string) => {
@@ -44,6 +46,7 @@ export default function TaskList({ tasks, setTasks }: TaskListProps) {
     setEditingTask(task);
     setNewTitle(task.title);
     setNewDescription(task.description);
+    setNewDueDate(task.dueDate);
   };
 
   // Cancel editing
@@ -51,6 +54,7 @@ export default function TaskList({ tasks, setTasks }: TaskListProps) {
     setEditingTask(null);
     setNewTitle("");
     setNewDescription("");
+    setNewDueDate("");
   };
 
   // Update a task
@@ -64,6 +68,7 @@ export default function TaskList({ tasks, setTasks }: TaskListProps) {
       id: editingTask._id,
       title: newTitle,
       description: newDescription,
+      dueDate: newDueDate,
     };
 
     try {
@@ -79,14 +84,14 @@ export default function TaskList({ tasks, setTasks }: TaskListProps) {
         setTasks(
           tasks.map((task) =>
             task._id === editingTask._id
-              ? { ...task, title: newTitle, description: newDescription }
+              ? { ...task, title: newTitle, description: newDescription, dueDate: newDueDate }
               : task
           )
         );
         cancelEditing();
       } else {
         console.error("Failed to update the task.");
-      }
+      }      
     } catch (error) {
       console.error("Error updating task:", error);
     }
@@ -114,6 +119,13 @@ export default function TaskList({ tasks, setTasks }: TaskListProps) {
                   onChange={(e) => setNewDescription(e.target.value)}
                   className="w-full p-2 mb-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
+                <input
+                  type="date"
+                  value={new Date(newDueDate).toISOString().split("T")[0]}
+                  onChange={(e) => setNewDueDate(e.target.value)}
+                  className="w-full p-2 mb-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+
                 <div className="flex justify-between">
                   <button
                     onClick={updateTask}
@@ -133,6 +145,15 @@ export default function TaskList({ tasks, setTasks }: TaskListProps) {
               <div>
                 <h3 className="text-xl font-bold text-gray-800 mb-2">{task.title}</h3>
                 <p className="text-gray-700 mb-4">{task.description}</p>
+                <p className="text-gray-600 text-sm mb-4">
+                  <strong>Due:</strong>{" "}
+                  {new Date(task.dueDate).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+
                 <div className="flex space-x-3 mt-4">
                   <button
                     onClick={() => startEditing(task)}
