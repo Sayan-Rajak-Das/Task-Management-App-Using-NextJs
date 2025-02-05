@@ -2,15 +2,16 @@ import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/dbConnect";
 import Task from "@/models/Task";
 import jwt from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
 
 const SECRET_KEY = process.env.JWT_SECRET || "your-secret-key";
 
 // Middleware to verify JWT
-async function verifyToken(req: Request) {
+async function verifyToken(req: Request): Promise<JwtPayload | null> {
   const token = req.headers.get("authorization")?.split(" ")[1];
   if (!token) return null;
   try {
-    return jwt.verify(token, SECRET_KEY);
+    return jwt.verify(token, SECRET_KEY) as JwtPayload;
   } catch {
     return null;
   }
