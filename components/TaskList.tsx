@@ -13,9 +13,10 @@ interface Task {
 interface TaskListProps {
   tasks: Task[]; // Array of tasks passed from parent
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>; // Function to update the tasks list
+  token: string; // Authentication token
 }
 
-export default function TaskList({ tasks, setTasks }: TaskListProps) {
+export default function TaskList({ tasks, setTasks, token }: TaskListProps) {
   const [editingTask, setEditingTask] = useState<Task | null>(null); // Task being edited
   const [newTitle, setNewTitle] = useState(""); // Updated title for the task
   const [newDescription, setNewDescription] = useState(""); // Updated description for the task
@@ -26,10 +27,11 @@ export default function TaskList({ tasks, setTasks }: TaskListProps) {
     try {
       const res = await fetch("/api/tasks", {
         method: "DELETE",
-        body: JSON.stringify({ id }),
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Pass JWT token
         },
+        body: JSON.stringify({ id }),
       });
       if (res.ok) {
         setTasks(tasks.filter((task) => task._id !== id));
@@ -77,6 +79,7 @@ export default function TaskList({ tasks, setTasks }: TaskListProps) {
         body: JSON.stringify(updatedTask),
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Pass JWT token
         },
       });
 

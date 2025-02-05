@@ -4,27 +4,27 @@ import TaskForm from "@/components/TaskForm";
 import TaskList from "@/components/TaskList";
 import { BeatLoader } from "react-spinners"; // Import loader
 
-export default function Task() {
+export default function Task({token}: any) {
   const [tasks, setTasks] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true); // Add loading state
 
   // Fetch the tasks from the API
-  useEffect(() => {
-    console.log("Fetching tasks...");
-    setTimeout(() => {
-      fetch("/api/tasks")
-        .then((res) => res.json())
-        .then((data) => {
-          setTasks(data);
-          console.log("Tasks fetched:", data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching tasks:", error);
-          setIsLoading(false);
-        });
-    }, 2000); // Simulated delay
-  }, []);
+  useEffect(() => {    
+    fetch("/api/tasks", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setTasks(data);
+        console.log("Tasks fetched:", data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching tasks:", error);
+        setIsLoading(false);
+      });
+    
+  }, [token]);
 
   const addTask = (newTask: any) => {
     setTasks((prevTasks) => [...prevTasks, newTask]); // Update the task list with the new task
@@ -39,7 +39,7 @@ export default function Task() {
           Task Management App
         </h1>
         <div className="shadow-lg rounded-lg p-6 bg-transparent">
-          <TaskForm addTask={addTask} />
+          <TaskForm addTask={addTask} token={token}  />
         </div>
         <div className="mt-8">
           {isLoading ? ( // Show loader while loading
@@ -48,7 +48,7 @@ export default function Task() {
               <p className="ml-4">Loading tasks...</p>
             </div>
           ) : (
-            <TaskList tasks={tasks} setTasks={setTasks} />
+            <TaskList tasks={tasks} setTasks={setTasks} token={token} />
           )}
         </div>
       </div>

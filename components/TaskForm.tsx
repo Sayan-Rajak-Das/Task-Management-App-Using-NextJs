@@ -5,9 +5,10 @@ import { useState } from "react";
 
 interface TaskFormProps {
   addTask: (newTask: any) => void;              // Callback to pass the new task to TaskList
+  token: string; // Authentication token
 }
 
-export default function TaskForm({ addTask }: TaskFormProps) {
+export default function TaskForm({ addTask, token }: TaskFormProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -19,6 +20,10 @@ export default function TaskForm({ addTask }: TaskFormProps) {
 
     const response = await fetch("/api/tasks", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Pass JWT token
+      },
       body: JSON.stringify(newTask),
     });
 
