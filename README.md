@@ -1,166 +1,55 @@
-Here’s the complete and well-structured `README.md` file for your **Task Management Application**:
 
----
+# Task Management Application
 
-# **Task Management Application**
+## Overview
+A web-based platform built with **Next.js** for managing tasks. It allows users to create, view, edit, and delete tasks with persistence via **MongoDB**. The app integrates **user authentication**, **JWT tokens**, and **session management** to ensure users can only view their tasks.
 
-A simple and intuitive task management application built using **Next.js** with **Server Actions** for managing tasks effectively. This project supports full CRUD operations, allowing users to create, view, edit, and delete tasks with data persistence via MongoDB.
+## Features
+- **Add Tasks**: Create tasks with title, description, and due date.
+- **View Tasks**: Display a list of tasks for the authenticated user.
+- **Update Tasks**: Edit task details and mark as completed.
+- **Delete Tasks**: Remove unwanted tasks.
+- **User Authentication**: Login/registration using **JWT** and **bcrypt** for password hashing.
+- **Responsive Design**: Built with **TailwindCSS** for a clean UI.
+- **Toast Notifications**: User-friendly notifications with **React-Toastify**.
 
----
+## Technologies Used
+- **Frontend**: Next.js, TailwindCSS, React-Toastify
+- **Backend**: Next.js API Routes, MongoDB, JWT Tokens, bcrypt
+- **Deployment**: Vercel
 
-## **Features**
+### Prerequisites:
+- **Node.js** (v14 or higher)
+- **MongoDB** (local or cloud)
+- **Vercel Account** (for deployment)
 
-- **Task Operations**:
-  - Create, read, update, and delete tasks.
-- **Responsive Design**:
-  - Fully responsive and optimized for all screen sizes.
-
----
-
-## **Technologies Used**
-
-- **Frontend**:  
-  - [Next.js](https://nextjs.org/) (Latest version)
-  - [TailwindCSS](https://tailwindcss.com/) for styling
-
-- **Backend**:  
-  - Next.js Server Actions for server-side logic
-
-- **Database**:  
-  - [MongoDB](https://www.mongodb.com/) for data persistence
-
-- **Deployment**:  
-  - [Vercel](https://vercel.com/) for hosting the application
-
----
-
-## **Live Demo**
-
-- **Live Application**: [Task Management App](https://task-management-app-using-next-js.vercel.app/)
-
----
-
-## **Setup Instructions**
-
-### **Prerequisites**
-- [Node.js](https://nodejs.org/) (v14 or higher)
-- [MongoDB](https://www.mongodb.com/) (Local or Cloud instance)
-- [Git](https://git-scm.com/)
-
-### **Step 1: Clone the Repository**
-```bash
-git clone https://github.com/Sayan-Rajak-Das/Task-Management-App-Using-NextJs.git
-cd Task-Management-App-Using-NextJs
-```
-
-### **Step 2: Install Dependencies**
-```bash
-npm install
-```
-
-### **Step 3: Configure Environment Variables**
-Create a `.env.local` file in the root directory and add the following:
-```
-MONGODB_URI=<Your MongoDB Connection String>
-```
-
-### **Step 4: Run the Application**
-To start the application in development mode:
-```bash
-npm run dev
-```
-- Open your browser and navigate to `http://localhost:3000`.
-
-### **Step 5: Build for Production**
-To create an optimized production build:
-```bash
-npm run build
-npm start
-```
-
----
-
-## **Deployment**
-
-The application is deployed on Vercel. Follow these steps for deployment:
-
-1. Push your code to a GitHub repository.
-2. Log in to [Vercel](https://vercel.com/) and import your GitHub repository.
-3. Set the **environment variables** in Vercel:
-   ```
-   MONGODB_URI=<Your MongoDB Connection String>
-   ```
-4. Trigger a deployment and access the live URL provided by Vercel.
-
----
-
-## **API Endpoints**
-
-### **Base URL**: `/api/tasks`
-
-1. **GET** `/api/tasks`  
-   Fetch all tasks.
-
-   **Response**:
-   ```json
-   [
-     {
-       "_id": "task-id",
-       "title": "Task Title",
-       "description": "Task Description",
-       "dueDate": "2025-02-10T00:00:00.000Z",
-       "completed": false
-     }
-   ]
+### Steps:
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/Sayan-Rajak-Das/Task-Management-App-Using-NextJs.git
+   cd task-manager-using-nextjs
    ```
 
-2. **POST** `/api/tasks`  
-   Create a new task.
-
-   **Request**:
-   ```json
-   {
-     "title": "New Task",
-     "description": "Task Description",
-     "dueDate": "2025-02-10"
-   }
+2. **Install Dependencies**:
+   ```bash
+   npm install
    ```
 
-3. **PATCH** `/api/tasks`  
-   Update an existing task.
+3. **Set Up Environment Variables**:
+   - Create `.env.local` and add:
+     ```
+     MONGODB_URI=your-mongodb-connection-string
+     JWT_SECRET=your-secret-key
+     ```
 
-   **Request**:
-   ```json
-   {
-     "id": "task-id",
-     "title": "Updated Task Title",
-     "description": "Updated Task Description",
-     "completed": true
-   }
+4. **Run the Application Locally**:
+   ```bash
+   npm run dev
    ```
+   Access the app at: [http://localhost:3000](http://localhost:3000)
 
-4. **DELETE** `/api/tasks`  
-   Delete a task.
-
-   **Request**:
-   ```json
-   {
-     "id": "task-id"
-   }
-   ```
+## Links
+- **Vercel Deployment**: [https://task-management-app-using-next-js.vercel.app/](https://task-management-app-using-next-js.vercel.app/)
+- **Full Documentation**: [Documentation Link](https://github.com/Sayan-Rajak-Das/Task-Management-App-Using-NextJs/blob/master/Task%20Management%20Application%20Documentation.pdf.pdf)
 
 ---
-
-## **Known Issues**
-- Ensure your MongoDB connection string is valid.
-- Currently, there is no authentication mechanism.
-
----
-
-## **Future Improvements**
-- Add user authentication for personalized task management.
-- Introduce drag-and-drop functionality for task prioritization.
-- Enhance the UI with animations and additional features.
-
----
-
