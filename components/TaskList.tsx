@@ -1,59 +1,94 @@
-// TaskList.tsx 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-
-interface TaskListProps {
-  tasks: any[]; // tasks passed from parent
-  setTasks: React.Dispatch<React.SetStateAction<any[]>>; // function to update the tasks list
+// Define the structure of a Task object
+interface Task {
+  _id: string; // MongoDB Object ID
+  title: string;
+  description: string;
 }
 
+interface TaskListProps {
+  tasks: Task[]; // Array of tasks passed from parent
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>; // Function to update the tasks list
+}
 
 export default function TaskList({ tasks, setTasks }: TaskListProps) {
-  // const [tasks, setTasks] = useState([]);
-  const [editingTask, setEditingTask] = useState(null);
-  const [newTitle, setNewTitle] = useState("");
-  const [newDescription, setNewDescription] = useState("");
+  const [editingTask, setEditingTask] = useState<Task | null>(null); // Task being edited
+  const [newTitle, setNewTitle] = useState(""); // Updated title for the task
+  const [newDescription, setNewDescription] = useState(""); // Updated description for the task
 
-
+  // Delete a task
   const deleteTask = async (id: string) => {
-    await fetch("/api/tasks", {
-      method: "DELETE",
-      body: JSON.stringify({ id }),
-    });
-    setTasks(tasks.filter((task: any) => task._id !== id));
+    try {
+      const res = await fetch("/api/tasks", {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok) {
+        setTasks(tasks.filter((task) => task._id !== id));
+      } else {
+        console.error("Failed to delete the task.");
+      }
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
   };
 
-  const startEditing = (task: any) => {
+  // Start editing a task
+  const startEditing = (task: Task) => {
     setEditingTask(task);
     setNewTitle(task.title);
     setNewDescription(task.description);
   };
 
+  // Cancel editing
   const cancelEditing = () => {
     setEditingTask(null);
     setNewTitle("");
     setNewDescription("");
   };
 
+  // Update a task
   const updateTask = async () => {
+    if (!editingTask) {
+      console.error("No task is currently being edited.");
+      return;
+    }
+
     const updatedTask = {
       id: editingTask._id,
       title: newTitle,
       description: newDescription,
     };
-    const res = await fetch("/api/tasks", {
-      method: "PATCH",
-      body: JSON.stringify(updatedTask),
-    });
 
-    if (res.ok) {
-      setTasks(tasks.map((task: any) => (task._id === editingTask._id ? { ...task, title: newTitle, description: newDescription } : task)));
-      cancelEditing();
-    } else {
-      // Handle error (e.g., show an error message)
-      console.error("Error updating task");
+    try {
+      const res = await fetch("/api/tasks", {
+        method: "PATCH",
+        body: JSON.stringify(updatedTask),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (res.ok) {
+        setTasks(
+          tasks.map((task) =>
+            task._id === editingTask._id
+              ? { ...task, title: newTitle, description: newDescription }
+              : task
+          )
+        );
+        cancelEditing();
+      } else {
+        console.error("Failed to update the task.");
+      }
+    } catch (error) {
+      console.error("Error updating task:", error);
     }
   };
 
@@ -61,7 +96,7 @@ export default function TaskList({ tasks, setTasks }: TaskListProps) {
     <div className="p-4 max-w-3xl mx-auto bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-semibold mb-4">Task List</h2>
       <ul>
-        {tasks.map((task: any) => (
+        {tasks.map((task) => (
           <li key={task._id} className="mb-4 p-4 border-b border-gray-200">
             {editingTask && editingTask._id === task._id ? (
               <div>
@@ -93,7 +128,9 @@ export default function TaskList({ tasks, setTasks }: TaskListProps) {
               </div>
             ) : (
               <div>
-                <h3 className="text-xl font-medium text-gray-800">{task.title}</h3>
+                <h3 className="text-xl font-medium text-gray-800">
+                  {task.title}
+                </h3>
                 <p className="text-gray-600 mt-2">{task.description}</p>
                 <div className="mt-3 flex space-x-2">
                   <button
