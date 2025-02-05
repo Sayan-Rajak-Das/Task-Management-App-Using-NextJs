@@ -56,7 +56,7 @@ export default function TaskForm({ addTask }: TaskFormProps) {
   
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg shadow-2xl w-full max-w-lg p-6 relative">
+          <div className="bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 text-gray-800 rounded-lg shadow-xl w-full max-w-lg p-6 relative">
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 text-white hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-full"
@@ -69,7 +69,7 @@ export default function TaskForm({ addTask }: TaskFormProps) {
               <div className="mb-4">
                 <label
                   htmlFor="title"
-                  className="block text-sm font-medium text-white mb-2"
+                  className="block text-sm font-medium text-gray-800 mb-2"
                 >
                   Task Title
                 </label>
@@ -86,7 +86,7 @@ export default function TaskForm({ addTask }: TaskFormProps) {
               <div className="mb-4">
                 <label
                   htmlFor="description"
-                  className="block text-sm font-medium text-white mb-2"
+                  className="block text-sm font-medium text-gray-800 mb-2"
                 >
                   Task Description
                 </label>
@@ -101,7 +101,7 @@ export default function TaskForm({ addTask }: TaskFormProps) {
               <div className="mb-4">
                 <label
                   htmlFor="dueDate"
-                  className="block text-sm font-medium text-white mb-2"
+                  className="block text-sm font-medium text-gray-800 mb-2"
                 >
                   Due Date
                 </label>
