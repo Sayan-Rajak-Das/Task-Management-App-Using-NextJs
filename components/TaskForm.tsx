@@ -43,58 +43,89 @@ export default function TaskForm({ addTask }: TaskFormProps) {
   };
 
   return (
-    <div className="p-4 max-w-3xl mx-auto">
+    <div
+      className="flex items-center justify-center h-auto w-auto"
+      style={{ backgroundColor: "transparent" }}
+    >
       <button
         onClick={openModal}
-        className="px-6 py-2 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+        className="px-6 py-3 border-4 border-green-600 text-green-600 font-bold rounded-full shadow-md hover:bg-green-600 hover:text-white transition duration-300"
       >
         Add Task
       </button>
-
+  
       {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
-            <h2 className="text-2xl font-semibold mb-4 text-center">Create a Task</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg shadow-2xl w-full max-w-lg p-6 relative">
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 text-white hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-full"
+              aria-label="Close modal"
+            >
+              ✖
+            </button>
+            <h2 className="text-3xl font-bold text-center mb-6">Create a Task</h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-medium text-white mb-2"
+                >
+                  Task Title
+                </label>
                 <input
                   type="text"
-                  placeholder="Title"
+                  id="title"
+                  placeholder="Enter task title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
-                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 rounded-lg border border-gray-300 text-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
                 />
               </div>
               <div className="mb-4">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-white mb-2"
+                >
+                  Task Description
+                </label>
                 <textarea
-                  placeholder="Description"
+                  id="description"
+                  placeholder="Enter task description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                ></textarea>
-              </div>
-              <div className="mb-4">
-                <input
-                  type="date"
-                  value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 rounded-lg border border-gray-300 text-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
                 />
               </div>
-              <div className="flex justify-between">
+              <div className="mb-4">
+                <label
+                  htmlFor="dueDate"
+                  className="block text-sm font-medium text-white mb-2"
+                >
+                  Due Date
+                </label>
+                <input
+                  type="date"
+                  id="dueDate"
+                  value={dueDate}
+                  onChange={(e) => setDueDate(e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 text-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                />
+              </div>
+              <div className="flex justify-between items-center mt-6">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                  className="px-6 py-3 bg-yellow-400 text-gray-800 font-bold rounded-full shadow-lg hover:bg-yellow-500 transition duration-300"
                 >
                   Add Task
                 </button>
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="px-4 py-2 bg-gray-500 text-white font-semibold rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+                  className="px-6 py-3 bg-red-400 text-white font-bold rounded-full shadow-lg hover:bg-red-500 transition duration-300"
                 >
-                  Close
+                  Cancel
                 </button>
               </div>
             </form>
@@ -103,4 +134,5 @@ export default function TaskForm({ addTask }: TaskFormProps) {
       )}
     </div>
   );
+  
 }

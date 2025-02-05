@@ -93,34 +93,37 @@ export default function TaskList({ tasks, setTasks }: TaskListProps) {
   };
 
   return (
-    <div className="p-4 max-w-3xl mx-auto bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold mb-4">Task List</h2>
-      <ul>
+    <div className="p-6 max-w-5xl mx-auto">
+      <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">Task List</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {tasks.map((task) => (
-          <li key={task._id} className="mb-4 p-4 border-b border-gray-200">
+          <div
+            key={task._id}
+            className="bg-gradient-to-r from-green-100 to-blue-100 p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300"
+          >
             {editingTask && editingTask._id === task._id ? (
               <div>
                 <input
                   type="text"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  className="w-full p-3 mb-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 mb-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
                 <textarea
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
-                  className="w-full p-3 mb-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 mb-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
                 <div className="flex justify-between">
                   <button
                     onClick={updateTask}
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                   >
                     Save
                   </button>
                   <button
                     onClick={cancelEditing}
-                    className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+                    className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
                   >
                     Cancel
                   </button>
@@ -128,29 +131,27 @@ export default function TaskList({ tasks, setTasks }: TaskListProps) {
               </div>
             ) : (
               <div>
-                <h3 className="text-xl font-medium text-gray-800">
-                  {task.title}
-                </h3>
-                <p className="text-gray-600 mt-2">{task.description}</p>
-                <div className="mt-3 flex space-x-2">
+                <h3 className="text-xl font-bold text-gray-800 mb-2">{task.title}</h3>
+                <p className="text-gray-700 mb-4">{task.description}</p>
+                <div className="flex space-x-3 mt-4">
                   <button
                     onClick={() => startEditing(task)}
-                    className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                    className="px-3 py-2 bg-yellow-400 text-white rounded-md hover:bg-yellow-500 transition duration-200"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => deleteTask(task._id)}
-                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200"
                   >
                     Delete
                   </button>
                 </div>
               </div>
             )}
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
