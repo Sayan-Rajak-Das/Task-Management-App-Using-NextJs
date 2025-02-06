@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 // Define the structure of a Task object
 interface Task {
-  _id: string; // MongoDB Object ID
+  _id: string; 
   title: string;
   description: string;
   dueDate: string;
@@ -22,7 +23,7 @@ export default function TaskList({ tasks, setTasks, token }: TaskListProps) {
   const [newDescription, setNewDescription] = useState(""); // Updated description for the task
   const [newDueDate, setNewDueDate] = useState("");
 
-  // Delete a task
+
   const deleteTask = async (id: string) => {
     try {
       const res = await fetch("/api/tasks", {
@@ -33,15 +34,19 @@ export default function TaskList({ tasks, setTasks, token }: TaskListProps) {
         },
         body: JSON.stringify({ id }),
       });
+  
       if (res.ok) {
         setTasks(tasks.filter((task) => task._id !== id));
+        toast.success("Task deleted successfully!"); 
       } else {
-        console.error("Failed to delete the task.");
+        const errorData = await res.json();
+        toast.error(errorData.error || "Failed to delete the task."); 
       }
-    } catch (error) {
-      console.error("Error deleting task:", error);
+    } catch (error: any) {
+      toast.error("An error occurred while deleting the task. Please try again.");
     }
   };
+  
 
   // Start editing a task
   const startEditing = (task: Task) => {
@@ -59,30 +64,29 @@ export default function TaskList({ tasks, setTasks, token }: TaskListProps) {
     setNewDueDate("");
   };
 
-  // Update a task
   const updateTask = async () => {
     if (!editingTask) {
-      console.error("No task is currently being edited.");
+      toast.error("No task is currently being edited.");
       return;
     }
-
+  
     const updatedTask = {
       id: editingTask._id,
       title: newTitle,
       description: newDescription,
       dueDate: newDueDate,
     };
-
+  
     try {
       const res = await fetch("/api/tasks", {
         method: "PATCH",
         body: JSON.stringify(updatedTask),
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Pass JWT token
+          Authorization: `Bearer ${token}`,     // Pass JWT token
         },
       });
-
+  
       if (res.ok) {
         setTasks(
           tasks.map((task) =>
@@ -91,12 +95,15 @@ export default function TaskList({ tasks, setTasks, token }: TaskListProps) {
               : task
           )
         );
+        toast.success("Task updated successfully!"); // Success message
         cancelEditing();
       } else {
-        console.error("Failed to update the task.");
-      }      
-    } catch (error) {
+        const errorData = await res.json();
+        toast.error(errorData.error || "Failed to update the task."); 
+      }
+    } catch (error: any) {
       console.error("Error updating task:", error);
+      toast.error("An error occurred while updating the task. Please try again.");
     }
   };
 

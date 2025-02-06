@@ -4,12 +4,12 @@ import TaskForm from "@/components/TaskForm";
 import TaskList from "@/components/TaskList";
 import { BeatLoader } from "react-spinners"; // Import loader
 
-export default function Task({token}: any) {
+export default function Task({ token }: any) {
   const [tasks, setTasks] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true); // Add loading state
 
   // Fetch the tasks from the API
-  useEffect(() => {    
+  useEffect(() => {
     fetch("/api/tasks", {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -23,7 +23,6 @@ export default function Task({token}: any) {
         console.error("Error fetching tasks:", error);
         setIsLoading(false);
       });
-    
   }, [token]);
 
   const addTask = (newTask: any) => {
@@ -39,13 +38,19 @@ export default function Task({token}: any) {
           Task Management App
         </h1>
         <div className="shadow-lg rounded-lg p-6 bg-transparent">
-          <TaskForm addTask={addTask} token={token}  />
+          <TaskForm addTask={addTask} token={token} />
         </div>
         <div className="mt-8">
-          {isLoading ? ( // Show loader while loading
+          {isLoading ? (
             <div className="flex justify-center items-center py-12 bg-gray-200">
               <BeatLoader color="#4A90E2" size={15} />
               <p className="ml-4">Loading tasks...</p>
+            </div>
+          ) : tasks.length === 0 ? (
+            <div className="flex justify-center items-center py-12">
+              <p className="text-lg text-center text-gray-800 font-semibold italic">
+                Your task list is empty! ✨ Start adding tasks and bring your ideas to life. 🚀
+              </p>
             </div>
           ) : (
             <TaskList tasks={tasks} setTasks={setTasks} token={token} />

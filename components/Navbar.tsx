@@ -1,12 +1,17 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
-const Navbar = ({isAuthenticated}: any) =>  {
+const Navbar = ({isAuthenticated}: any) =>  { 
+  const router = useRouter();
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     
-    window.location.reload(); 
+    toast.success("Logout successfully");
+    router.push("/login"); 
   };
 
   return (

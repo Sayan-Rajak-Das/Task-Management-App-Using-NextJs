@@ -1,11 +1,11 @@
-// TaskForm.tsx 
 "use client";
 
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 interface TaskFormProps {
   addTask: (newTask: any) => void;              // Callback to pass the new task to TaskList
-  token: string; // Authentication token
+  token: string;                                // Authentication token
 }
 
 export default function TaskForm({ addTask, token }: TaskFormProps) {
@@ -17,26 +17,35 @@ export default function TaskForm({ addTask, token }: TaskFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newTask = { title, description, dueDate };
-
-    const response = await fetch("/api/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Pass JWT token
-      },
-      body: JSON.stringify(newTask),
-    });
-
-    if (response.ok) {
-      const createdTask = await response.json();
-      addTask(createdTask); // Add the new task to the task list
+  
+    try {
+      const response = await fetch("/api/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,              // Pass JWT token
+        },
+        body: JSON.stringify(newTask),
+      });
+  
+      if (response.ok) {
+        const createdTask = await response.json();
+        addTask(createdTask);                            // Add the new task to the task list
+        toast.success("Task added successfully!"); 
+  
+        // Clear the form and close the modal
+        setTitle("");
+        setDescription("");
+        setDueDate("");
+        setIsModalOpen(false);
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.error || "Failed to add the task.");
+      }
+    } catch (error: any) {
+      toast.error("An error occurred while adding the task. Please try again.");
+      console.error("Error adding task:", error); 
     }
-
-    // Clear the form and close the modal
-    setTitle("");
-    setDescription("");
-    setDueDate("");
-    setIsModalOpen(false);
   };
 
   const openModal = () => {

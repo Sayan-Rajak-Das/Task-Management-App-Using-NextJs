@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -9,27 +10,35 @@ export default function Register() {
   const [message, setMessage] = useState("");
   const router = useRouter();
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
 
-    if (password !== confirmPassword) {
-      setMessage("Passwords do not match");
-      return;
-    }
+const handleRegister = async (e: React.FormEvent) => {
+  e.preventDefault();
 
+  if (password !== confirmPassword) {
+    toast.error("Passwords do not match");
+    return;
+  }
+
+  try {
     const response = await fetch("/api/auth", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
 
     const data = await response.json();
-    if (response.ok) {
-      setMessage("User registered successfully! You can now login.");
-      setTimeout(() => router.push("/login"), 2000);
-    } else {
-      setMessage("Registration failed");
+
+    if (!response.ok) {
+      throw new Error(data.error || "Registration failed");
     }
-  };
+
+    toast.success("User registered successfully! You can now login.");
+    router.push("/login");
+  } catch (error: any) {
+    toast.error(error.message || "Something went wrong. Please try again.");
+  }
+};
+
 
   return (
     <div className="p-4 max-w-md mx-auto bg-white shadow-md rounded-lg">

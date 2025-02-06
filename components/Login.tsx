@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -9,20 +10,28 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await fetch("/api/auth", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
+  
+    try {
+      const response = await fetch("/api/auth", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+  
+      const data = await response.json();
 
-    const data = await response.json();
-    if (response.ok) {
+      if (!response.ok) {
+        throw new Error(data.error || "Invalid credentials");
+      }
+  
       localStorage.setItem("token", data.token);
       router.push("/");
-    } else {
-      alert("Invalid credentials");
+      toast.success("Login successfully");
+    } catch (error: any) {
+      toast.error(error.message || "Something went wrong. Please try again.");
     }
   };
+  
 
   return (
     <div className="p-4 max-w-md mx-auto bg-white shadow-md rounded-lg">
