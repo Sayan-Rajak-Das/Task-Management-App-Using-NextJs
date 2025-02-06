@@ -3,52 +3,53 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-// Define the structure of a Task object
 interface Task {
-  _id: string; 
+  _id: string;
   title: string;
   description: string;
   dueDate: string;
 }
 
 interface TaskListProps {
-  tasks: Task[]; // Array of tasks passed from parent
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>; // Function to update the tasks list
-  token: string; // Authentication token
+  tasks: Task[];
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  token: string;
 }
 
 export default function TaskList({ tasks, setTasks, token }: TaskListProps) {
-  const [editingTask, setEditingTask] = useState<Task | null>(null); // Task being edited
-  const [newTitle, setNewTitle] = useState(""); // Updated title for the task
-  const [newDescription, setNewDescription] = useState(""); // Updated description for the task
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [newTitle, setNewTitle] = useState("");
+  const [newDescription, setNewDescription] = useState("");
   const [newDueDate, setNewDueDate] = useState("");
-
+  const [loadingTaskId, setLoadingTaskId] = useState<string | null>(null);
 
   const deleteTask = async (id: string) => {
+    setLoadingTaskId(id); 
+
     try {
       const res = await fetch("/api/tasks", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Pass JWT token
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ id }),
       });
-  
+
       if (res.ok) {
         setTasks(tasks.filter((task) => task._id !== id));
-        toast.success("Task deleted successfully!"); 
+        toast.success("Task deleted successfully!");
       } else {
         const errorData = await res.json();
-        toast.error(errorData.error || "Failed to delete the task."); 
+        toast.error(errorData.error || "Failed to delete the task.");
       }
     } catch (error: any) {
       toast.error("An error occurred while deleting the task. Please try again.");
+    } finally {
+      setLoadingTaskId(null); 
     }
   };
-  
 
-  // Start editing a task
   const startEditing = (task: Task) => {
     setEditingTask(task);
     setNewTitle(task.title);
@@ -56,7 +57,6 @@ export default function TaskList({ tasks, setTasks, token }: TaskListProps) {
     setNewDueDate(task.dueDate);
   };
 
-  // Cancel editing
   const cancelEditing = () => {
     setEditingTask(null);
     setNewTitle("");
@@ -69,24 +69,26 @@ export default function TaskList({ tasks, setTasks, token }: TaskListProps) {
       toast.error("No task is currently being edited.");
       return;
     }
-  
+
+    setLoadingTaskId(editingTask._id); 
+
     const updatedTask = {
       id: editingTask._id,
       title: newTitle,
       description: newDescription,
       dueDate: newDueDate,
     };
-  
+
     try {
       const res = await fetch("/api/tasks", {
         method: "PATCH",
         body: JSON.stringify(updatedTask),
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,     // Pass JWT token
+          Authorization: `Bearer ${token}`,
         },
       });
-  
+
       if (res.ok) {
         setTasks(
           tasks.map((task) =>
@@ -95,15 +97,16 @@ export default function TaskList({ tasks, setTasks, token }: TaskListProps) {
               : task
           )
         );
-        toast.success("Task updated successfully!"); // Success message
+        toast.success("Task updated successfully!");
         cancelEditing();
       } else {
         const errorData = await res.json();
-        toast.error(errorData.error || "Failed to update the task."); 
+        toast.error(errorData.error || "Failed to update the task.");
       }
     } catch (error: any) {
-      console.error("Error updating task:", error);
       toast.error("An error occurred while updating the task. Please try again.");
+    } finally {
+      setLoadingTaskId(null); 
     }
   };
 
@@ -139,10 +142,16 @@ export default function TaskList({ tasks, setTasks, token }: TaskListProps) {
                 <div className="flex justify-between">
                   <button
                     onClick={updateTask}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center justify-center"
+                    disabled={loadingTaskId === task._id}
                   >
-                    Save
+                    {loadingTaskId === task._id ? (
+                      <span className="w-5 h-5 border-2 border-white border-t-transparent border-solid rounded-full animate-spin"></span>
+                    ) : (
+                      "Save"
+                    )}
                   </button>
+
                   <button
                     onClick={cancelEditing}
                     className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
@@ -171,11 +180,17 @@ export default function TaskList({ tasks, setTasks, token }: TaskListProps) {
                   >
                     Edit
                   </button>
+
                   <button
                     onClick={() => deleteTask(task._id)}
-                    className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200"
+                    className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200 flex items-center justify-center"
+                    disabled={loadingTaskId === task._id}
                   >
-                    Delete
+                    {loadingTaskId === task._id ? (
+                      <span className="w-5 h-5 border-2 border-white border-t-transparent border-solid rounded-full animate-spin"></span>
+                    ) : (
+                      "Delete"
+                    )}
                   </button>
                 </div>
               </div>
