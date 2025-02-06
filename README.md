@@ -49,7 +49,7 @@ A web-based platform built with **Next.js** for managing tasks. It allows users 
    Access the app at: [http://localhost:3000](http://localhost:3000)
 
 ## Links
-- **Vercel Deployment**: [https://task-management-app-using-next-js.vercel.app/](https://task-management-app-using-next-js.vercel.app/)
+- **Vercel Deployment**: [https://task-management-app-using-next-js.vercel.app/](https://task-management-app-using-next-js.vercel.app/login)
 - **Full Documentation**: [Documentation Link](https://github.com/Sayan-Rajak-Das/Task-Management-App-Using-NextJs/blob/master/Task%20Management%20Application%20Documentation.pdf.pdf)
 
 ---
